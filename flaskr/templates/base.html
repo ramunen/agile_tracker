@@ -1,0 +1,35 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block meta_title %} {% endblock %}</title>
+ 
+    <link href="{{url_for('static', filename = 'bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+
+</head>
+<body>
+<div class="nav navbar navbar-expand-lg navbar-dark bg-primary justify-content-center">
+{% block header %}
+  <h1 class="text-white">Agile Tracker</h1>
+{% endblock %}
+</div>
+<div class="container col-md-6 col-sm-12 mt-5">
+{% block body %}
+ 
+ 
+{% endblock %}
+</div> 
+ 
+<script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
+<script src="{{url_for('static', filename='bootstrap/js/form-validation.js')}}"></script> 
+<script type="text/javascript">     
+  function isNumber(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+          return false;
+      }
+      return true;
+  }
+</script>
+</body>
+</html>

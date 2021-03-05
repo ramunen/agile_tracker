@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+  <h1>{% block title %}{% endblock %}</h1>
+  <div class="col-12">
+    <a class="action w-100 btn btn-outline-primary btn-lg" href="{{ url_for('story.create_story') }}">
+      Add new story
+  </a>
+    </div>
+
+    <div class="list-group pt-3">
+   {% for story in stories %}
+   <li class="list-group-item list-group-item-action">
+   
+    <div class="d-flex w-100 justify-content-between">
+      <a href="{{ url_for('story.view_story', story_id=story['id']) }}"  aria-current="true"><h5 class="mb-1">S-{{ story['id'] }} {{ story['title'] }}</h5></a>
+      <small><a href="{{ url_for('task.create_task', story_id=story['id']) }}">Add new task</a></small>
+    </div>
+
+    <p class="mb-1">{{ story['content'][:200] }}</p>
+    <div class="float-end">
+    <small class="badge bg-light rounded-pill text-dark">Est: {{ story['estimate'] }}</small> <small class="badge bg-secondary rounded-pill">Logged: 0</small> 
+    </div>
+  </li>
+  {% for task in story_tasks[story['id']] %}
+    <li class="list-group-item list-group-item-action">
+        
+        <div class="d-flex w-100 justify-content-between">
+          <a href="#"  aria-current="true"><h6 class="mb-1">T-{{ task[2] }} {{ task[3] }}</h5></a>
+
+            {% if  task[8] is none %}
+            <small>Developer unassigned</small>
+            {% else %}
+            <small><a href="{{ url_for('log.create_log', task_id=task[2]) }}">Log time</a></small>
+            {% endif %}
+          
+        </div>
+    
+        <p class="mb-1">{{ task[4][:200] }}</p>
+        <div class="d-flex w-100 justify-content-between">
+          <div>
+        {% if  task[7] is none %}
+          
+        {% else %}
+          <small class="badge bg-light rounded-pill text-dark">Iteration: {{ task[5] }}</small>
+        {% endif %}
+      
+        {% if  task[8] is none %}
+          
+        {% else %}
+          <small class="badge bg-light rounded-pill text-dark">Assigned: {{ task[8] }}</small>
+        {% endif %}
+      </div>
+      <div>
+        <small class="badge bg-light rounded-pill text-dark">Est: {{ task[6] }}</small> <small class="badge bg-secondary rounded-pill">Logged: 0</small> 
+      </div>
+      </div>
+    </li> 
+  {% endfor %}
+   {% endfor %}
+  </div>
+
+  
+  
+{% endblock %}

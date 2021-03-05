@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+  <h1>{% block title %}{{ story['title'] }}{% endblock %}</h1>
+  <div class="">
+    <a class="action " href="{{ url_for('index') }}">
+      Back to home
+  </a>
+    </div>
+<div>
+
+    <label for="content" class="col-10 col-form-label">Description</label>
+    <div class="col-10">
+      <input type="text" readonly class="form-control-plaintext" id="content" value="{{ story['content'] }}">
+    </div>
+
+    <label for="estimate" class="col-10 col-form-label">Time estimate:</label>
+    <div class="col-10">
+      <input type="text" readonly class="form-control-plaintext" id="content" value="{{ story['estimate'] }}">
+    </div>
+
+</div>
+    <div class="list-group pt-3">
+
+  {% for task in tasks %}
+    <li class="list-group-item list-group-item-action">
+        
+        <div class="d-flex w-100 justify-content-between">
+          <a href="#"  aria-current="true"><h6 class="mb-1">T-{{ task[2] }} {{ task[3] }}</h5></a>
+
+            {% if  task[8] is none %}
+            <small>Developer unassigned</small>
+            {% else %}
+            <small><a href="{{ url_for('log.create_log', task_id=task[2]) }}">Log time</a></small>
+            {% endif %}
+          
+        </div>
+    
+        <p class="mb-1">{{ task[4][:200] }}</p>
+        <div class="d-flex w-100 justify-content-between">
+          <div>
+        {% if  task[7] is none %}
+          
+        {% else %}
+          <small class="badge bg-light rounded-pill text-dark">Iteration: {{ task[5] }}</small>
+        {% endif %}
+      
+        {% if  task[8] is none %}
+          
+        {% else %}
+          <small class="badge bg-light rounded-pill text-dark">Assigned: {{ task[8] }}</small>
+        {% endif %}
+      </div>
+      <div>
+        <small class="badge bg-light rounded-pill text-dark">Est: {{ task[6] }}</small> <small class="badge bg-secondary rounded-pill">Logged: 0</small> 
+      </div>
+      </div>
+      <table class="table table-sm">
+        <thead>
+            <tr>
+              <th scope="col">Description</th>
+              <th scope="col">Developer</th>
+              <th scope="col">Logged time</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+      {% for log in logs[task[2]] %}
+      <tr>
+        <td>{{ log[3] }}</td>
+        <td>{{ log[6] }}</td>
+        <td>{{ log[4] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+        </table>
+    </li> 
+  {% endfor %}
+  
+  </div>
+
+  
+  
+{% endblock %}

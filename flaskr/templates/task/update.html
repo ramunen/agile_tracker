@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block body %}
+  <h1>{% block title %}Edit task{% endblock %}</h1>
+
+<form method="post">
+    <label for="title">Task title</label>
+    <input name="title" id="title" value="{{ request.form['title'] or task['title'] }}" required>
+    <label for="content">Task description</label>
+    <textarea name="content" id="content">{{ request.form['content'] or task['content'] }}</textarea>
+    <label for="estimate">Task time estimate</label>
+    <input name="estimate" id="estimate" value="{{ request.form['estimate'] or task['estimate']}}">
+    <label for="iteration">Iteration number</label>
+    <input name="iteration" id="iteration" value="{{ request.form['iteration'] or task['iteration'] }}">
+    <label for="developer">Assign to developer</label>
+    <select name="developer" id="developer" >
+        {% for developer in developers %}
+            <option value="{{ developer['id'] }}" 
+            {% if developer['id'] == task['developer_id'] %}
+                selected="selected"
+            {% endif %}
+            >{{ developer['name_surname'] }}</option>
+        {% endfor %}
+
+    </select>
+
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}
