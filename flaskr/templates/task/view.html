@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+  <h1>{% block title %}T-{{ task['id'] }} {{task['title'] }}{% endblock %}</h1>
+  <div class="">
+    <a class="action " href="{{ url_for('index') }}">
+      Back to home
+  </a>
+    </div>
+<div>
+
+    
+    <div class="mt-3 col-12">
+      
+      <small>Task description:</small>
+      <div class="mb-3 col-12">{{ task['content'] }}"</div>
+
+      <small class="badge bg-light rounded-pill text-dark">Estimate: 
+        
+        {% if  task['estimate'] is none %}
+          0
+        {% else %}
+        {{ task['estimate'] }}
+        {% endif %}
+      </small>
+      <small class="badge bg-secondary rounded-pill">Logged: 
+        
+        {% if  task['actual'] is none %}
+          0
+        {% else %}
+        {{ task['actual'] }}
+        {% endif %}
+      </small> 
+       
+      {% if  task['iteration'] == '' %}
+        
+      {% else %}
+          <small class="badge bg-light rounded-pill text-dark">Iteration: {{ task['iteration'] }}</small>
+        {% endif %}
+      
+        {% if  task['developer_name'] is none %}
+          
+        {% else %}
+          <small class="badge bg-light rounded-pill text-dark">Assigned: {{ task['developer_name'] }}</small>
+        {% endif %}
+    
+    </div>
+
+
+</div>
+<div class="mt-3 ">
+<a class="action w-100 btn btn-outline-primary btn-lg" href="{{ url_for('log.create_log', task_id=task['task_id']) }}">
+  Log time
+</a>
+</div>
+    <div class="list-group pt-3">
+
+
+    <li class="list-group-item list-group-item-action">
+        
+       
+      <table class="mt-3 table table-sm">
+        <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Description</th>
+              <th scope="col">Developer</th>
+              <th scope="col">Logged time</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+      {% for log in logs %}
+      <tr>
+        <td>{{ log['work_date'] }}</td>
+        <td>{{ log['log_content'] }}</td>
+        <td>{{ log['developer_name'] }}</td>
+        <td>{{ log['log_actual'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+        </table>
+    </li> 
+
+  
+  </div>
+
+  
+  
+{% endblock %}

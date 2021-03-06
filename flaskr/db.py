@@ -58,31 +58,43 @@ def get_stories():
     
     return stories
 
+def get_task(task_id):
+    db = get_db()
+    task = db.execute('SELECT t.id as id, t.developer_id as developer_id, d.name_surname as developer_name, t.story_id as story_id, s.title as story_title, t.title as title, t.content as content, t.estimate as estimate, sum(l.actual) as actual, t.iteration as iteration FROM tasks t \
+            JOIN stories s ON s.id = t.story_id \
+            LEFT JOIN developers d ON d.id = t.developer_id \
+            LEFT JOIN logs l ON l.task_id = t.id \
+            WHERE t.id = ? \
+            GROUP BY t.id', (task_id,)).fetchone()
+
+    return task
+
 def get_all_tasks():
     db = get_db()
-    tasks = db.execute('SELECT s.id, s.title, t.id, t.title, t.content, t.estimate, d.id, d.name_surname FROM tasks t \
+    tasks = db.execute('SELECT s.id as story_id, s.title as story_title, t.id as task_id, t.title as task_title, t.content as task_content, t.iteration as task_iteration, t.estimate as task_estimate, d.id as developer_id, d.name_surname as developer_name FROM tasks t \
             JOIN stories s ON s.id = t.story_id \
-            JOIN developers d ON d.id = t.developer_id \
+            LEFT JOIN developers d ON d.id = t.developer_id \
             ORDER BY t.id ASC').fetchall()
     
     return tasks
 
 def get_story_tasks(story_id):
     db = get_db()
-    tasks = db.execute('SELECT s.id, s.title, t.id, t.title, t.content, t.iteration, t.estimate, d.id, d.name_surname FROM tasks t \
+    tasks = db.execute('SELECT s.id as story_id, s.title as story_title, t.id as task_id, t.title as task_title, t.content as task_content, t.iteration as task_iteration, t.estimate as task_estimate, sum(l.actual) as task_actual, d.id as developer_id, d.name_surname as developer_name FROM tasks t \
             JOIN stories s ON s.id = t.story_id \
             LEFT JOIN developers d ON d.id = t.developer_id \
+            LEFT JOIN logs l ON l.task_id = t.id \
             WHERE s.id = ? \
-            ORDER BY t.id ASC', (story_id,)).fetchall()
-    
+            GROUP BY t.id ORDER BY t.id ASC', (story_id,)).fetchall()
+
     return tasks
 
 def get_task_logs(task_id):
     db = get_db()
-    tasks = db.execute('SELECT t.id, t.title, l.id, l.content, l.actual, d.id, d.name_surname FROM logs l \
+    logs = db.execute('SELECT t.id as task_id, t.title as task_title, l.id as log_id, l.work_date as work_date, l.content as log_content, l.actual as log_actual, d.id as developer_id, d.name_surname as developer_name FROM logs l \
             JOIN tasks t ON t.id = l.task_id \
-            JOIN developers d ON d.id = t.developer_id \
+            LEFT JOIN developers d ON d.id = t.developer_id \
             WHERE t.id = ? \
             ORDER BY l.id ASC', (task_id,)).fetchall()
     
-    return tasks
+    return logs

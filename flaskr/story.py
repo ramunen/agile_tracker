@@ -48,18 +48,21 @@ def view_story(story_id):
     story = get_story(story_id)
     
     tasks = get_story_tasks(story_id)
-
+    
     logs = {}
+    story_logged_hours = 0
     for task in tasks:
-        logs[task[2]] = get_task_logs(task[2])
-        print(logs[task[2]])
+        logs[task['task_id']] = get_task_logs(task['task_id'])
+        story_logged_hours += task['task_actual'] if task['task_actual'] is not None else 0
+        
+    return render_template('story/view.html', story_id=story_id, story=story, tasks=tasks, logs=logs, story_logged_hours=story_logged_hours)
 
-    return render_template('story/view.html', story_id=story_id, story=story, tasks=tasks, logs=logs)
-
-
-@bp.route('/<int:story>/update', methods=('GET', 'POST'))
+@bp.route('/<int:story_id>/update', methods=('GET', 'POST'))
 def update_story(story_id):
     story = get_story(story_id)
+    estimate = story['estimate'] if story['estimate'] is not None else 0
+    hours_db = estimate // 60
+    minutes_db = estimate % 60 
 
     if request.method == 'POST':
         title = request.form['title']
@@ -85,11 +88,11 @@ def update_story(story_id):
             db.commit()
             return redirect(url_for('index'))
 
-    return render_template('story/update.html', story=story)
+    return render_template('story/update.html', story_id=story_id, story=story, hours=hours_db, minutes=minutes_db)
 
 @bp.route('/<int:story_id>/delete', methods=('POST',))
 def delete_story(story_id):
-    get_story(story_id)
+    #get_story(story_id)
     db = get_db()
     db.execute('DELETE FROM stories WHERE id = ?', (story_id,))
     db.commit()

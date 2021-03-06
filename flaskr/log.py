@@ -13,6 +13,7 @@ def create_log():
         'SELECT id, title, content, developer_id FROM tasks WHERE id = ?', (task_id,)).fetchone()
     
     if request.method == 'POST':
+        work_date = request.form['date']
         content = request.form['content']
         hours = int(request.form['hours'])
         minutes = int(request.form['minutes'])
@@ -32,9 +33,9 @@ def create_log():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO logs (developer_id, task_id, content, actual)'
-                ' VALUES (?, ?, ?, ?)',
-                (developer_id, task_id, content, actual, )
+                'INSERT INTO logs (developer_id, task_id, work_date, content, actual)'
+                ' VALUES (?, ?, ?, ?, ?)',
+                (developer_id, task_id, work_date, content, actual, )
             )
             db.commit()
             return redirect(url_for('index'))

@@ -35,11 +35,14 @@ def create_app(test_config=None):
         
         stories = get_stories()
         story_tasks = {}
+        story_logged_hours = {}
         for story in stories:
-            
+            story_logged_hours[story['id']] = 0
             story_tasks[story['id']] = get_story_tasks(story['id'])
+            for task in story_tasks[story['id']]:
+                story_logged_hours[story['id']] += task['task_actual'] if task['task_actual'] is not None else 0
             
-        return render_template('/index.html', stories=stories, story_tasks=story_tasks)
+        return render_template('/index.html', stories=stories, story_tasks=story_tasks, story_logged_hours=story_logged_hours)
 
     from . import story
     app.register_blueprint(story.bp)

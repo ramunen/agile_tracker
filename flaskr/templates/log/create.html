@@ -16,7 +16,14 @@
   
   <form method="post" class="needs-validation" novalidate>
     <div class="row g-3">
-    
+    <div class="col-12"> <!-- Date input -->
+      <label for="date" class="form-label" >Date</label>
+      <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" required/>
+      <div class="invalid-feedback">
+        Date is required.
+      </div>
+    </div>
+
     <div class="col-12">
       <label for="content" class="form-label">Description <span class="text-danger">*</span></label>
       <textarea name="content" rows="5" id="content" class="form-control" required>{{ request.form['content'] }}</textarea>
@@ -44,9 +51,9 @@
     <input type="submit" class="w-100 btn btn-primary btn-lg" value="Save">
     </div>
     <div class="col-12">
-      <a class="action w-100 btn btn-outline-primary btn-lg" href="{{ url_for('index') }}">
-      Cancel
-    </a>
+      <a class="action w-100 btn btn-outline-primary btn-lg" onclick="history.back(-1)" >
+        Cancel
+      </a>
       </div>
   </div>
   </form>

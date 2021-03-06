@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 from werkzeug.exceptions import abort
 
-from flaskr.db import get_db, get_devs
+from flaskr.db import get_db, get_task, get_devs, get_task_logs
 
 bp = Blueprint('task', __name__, url_prefix='/task')
 
@@ -45,27 +45,35 @@ def create_task():
 
     return render_template('task/create.html', story_id=story_id, story=story, developers=dev_names)
 
-def get_task(task_id):
-    task = get_db().execute(
-        'SELECT id, developer_id, story_id, title, content, estimate, iteration FROM tasks WHERE id = ?', (task_id,)).fetchone()
+@bp.route('/<int:task_id>/view', methods=('GET', 'POST'))
+def view_task(task_id):
+    
+    task = get_task(task_id)
+    logs = get_task_logs(task_id)
+    
+    return render_template('task/view.html', task_id=task_id, task=task, logs=logs)
 
-    if task is None:
-        abort(404, f"Story {task_id} doesn't exist.")
-
-    return task
 
 @bp.route('/<int:task_id>/update', methods=('GET', 'POST'))
-def update_task(task_id, developers):
+def update_task(task_id):
     task = get_task(task_id)
+
+    dev_names = [dev['name_surname'] for dev in get_devs()]
+    estimate = task['estimate'] if task['estimate'] is not None else 0
+    hours_db = estimate // 60
+    minutes_db = estimate % 60 
 
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-        hours = request.form['hours']
-        minutes = request.form['minutes']
-        estimate = hours*60 + minutes
+        hours = int(request.form['hours'])
+        minutes = int(request.form['minutes'])
+        estimate = int(hours*60 + minutes)
         iteration = request.form['iteration']
-        developer_id = request.form['developer_id']
+        developer_name = request.form['developer']
+        
+        developer_id = dev_names.index(request.form['developer'])+1 if developer_name in dev_names else ''
+        
         error = None
 
         if not title:
@@ -84,7 +92,7 @@ def update_task(task_id, developers):
             db.commit()
             return redirect(url_for('index'))
 
-    return render_template('task/update.html', task=task, developers=developers)
+    return render_template('task/update.html', task=task, developers=dev_names, hours=hours_db, minutes=minutes_db)
 
 @bp.route('/<int:task_id>/delete', methods=('POST',))
 def delete_task(task_id):

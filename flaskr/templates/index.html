@@ -8,52 +8,76 @@
       Add new story
   </a>
     </div>
-
+    
     <div class="list-group pt-3">
    {% for story in stories %}
    <li class="list-group-item list-group-item-action">
    
     <div class="d-flex w-100 justify-content-between">
-      <a href="{{ url_for('story.view_story', story_id=story['id']) }}"  aria-current="true"><h5 class="mb-1">S-{{ story['id'] }} {{ story['title'] }}</h5></a>
-      <small><a href="{{ url_for('task.create_task', story_id=story['id']) }}">Add new task</a></small>
+      <a href="{{ url_for('story.view_story', story_id=story['id']) }}"  aria-current="true"><h5 class="mb-1">S-{{ story['id'] }} {{ story['title'] }}</h5></a> 
+      <small>
+        <a href="{{ url_for('task.create_task', story_id=story['id'])}}">Add new task</a> 
+        <a href="{{ url_for('story.update_story', story_id=story['id'])}}"><i class="fas fa-edit"></i></a> 
+        <a href="{{ url_for('story.delete_story', story_id=story['id'])}}"><i class="fas fa-trash"></i></a> 
+      </small>
     </div>
 
     <p class="mb-1">{{ story['content'][:200] }}</p>
     <div class="float-end">
-    <small class="badge bg-light rounded-pill text-dark">Est: {{ story['estimate'] }}</small> <small class="badge bg-secondary rounded-pill">Logged: 0</small> 
+    <small class="badge bg-light rounded-pill text-dark">Est: {{ story['estimate'] }}</small> <small class="badge bg-secondary rounded-pill">Logged: {{  story_logged_hours[story['id']]  }}</small> 
     </div>
   </li>
   {% for task in story_tasks[story['id']] %}
     <li class="list-group-item list-group-item-action">
         
         <div class="d-flex w-100 justify-content-between">
-          <a href="#"  aria-current="true"><h6 class="mb-1">T-{{ task[2] }} {{ task[3] }}</h5></a>
-
-            {% if  task[8] is none %}
-            <small>Developer unassigned</small>
+          <a href="{{ url_for('task.view_task', task_id=task['task_id']) }}"  aria-current="true"><h6 class="mb-1">T-{{ task['task_id'] }} {{ task['task_title'] }}</h5></a>
+            <small>
+            {% if  task['developer_name'] is none %}
+            Developer unassigned
             {% else %}
-            <small><a href="{{ url_for('log.create_log', task_id=task[2]) }}">Log time</a></small>
+            <a href="{{ url_for('log.create_log', task_id=task[2]) }}">Log time</a>
             {% endif %}
           
+
+            <a href="{{ url_for('task.update_task', task_id=task['task_id'])}}"><i class="fas fa-edit"></i></a> 
+        <a href="{{ url_for('task.delete_task', task_id=task['task_id'])}}"><i class="fas fa-trash"></i></a> 
+      </small>
         </div>
     
-        <p class="mb-1">{{ task[4][:200] }}</p>
+        <p class="mb-1">{{ task['task_content'][:200] }}</p>
         <div class="d-flex w-100 justify-content-between">
           <div>
-        {% if  task[7] is none %}
+        {% if  task['task_iteration'] == '' %}
           
         {% else %}
-          <small class="badge bg-light rounded-pill text-dark">Iteration: {{ task[5] }}</small>
+          <small class="badge bg-light rounded-pill text-dark">Iteration: {{ task['task_iteration'] }}</small>
         {% endif %}
       
-        {% if  task[8] is none %}
+        {% if  task['developer_name'] is none %}
           
         {% else %}
-          <small class="badge bg-light rounded-pill text-dark">Assigned: {{ task[8] }}</small>
+          <small class="badge bg-light rounded-pill text-dark">Assigned: {{ task['developer_name'] }}</small>
         {% endif %}
       </div>
       <div>
-        <small class="badge bg-light rounded-pill text-dark">Est: {{ task[6] }}</small> <small class="badge bg-secondary rounded-pill">Logged: 0</small> 
+        <small class="badge bg-light rounded-pill text-dark">Est: 
+          {% if  task['task_estimate'] is none %}
+          0
+        {% else %}
+        {{ task['task_estimate'] }}
+        {% endif %}
+          
+        </small> 
+        <small class="badge bg-secondary rounded-pill">Logged: 
+          
+          {% if  task['task_actual'] is none %}
+          0
+        {% else %}
+        {{ task['task_actual'] }}
+        {% endif %}
+
+        </small> 
       </div>
       </div>
     </li> 

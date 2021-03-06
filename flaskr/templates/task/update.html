@@ -1,29 +1,85 @@
 {% extends 'base.html' %}
 
 {% block body %}
-  <h1>{% block title %}Edit task{% endblock %}</h1>
+  
 
-<form method="post">
-    <label for="title">Task title</label>
-    <input name="title" id="title" value="{{ request.form['title'] or task['title'] }}" required>
-    <label for="content">Task description</label>
-    <textarea name="content" id="content">{{ request.form['content'] or task['content'] }}</textarea>
-    <label for="estimate">Task time estimate</label>
-    <input name="estimate" id="estimate" value="{{ request.form['estimate'] or task['estimate']}}">
-    <label for="iteration">Iteration number</label>
-    <input name="iteration" id="iteration" value="{{ request.form['iteration'] or task['iteration'] }}">
-    <label for="developer">Assign to developer</label>
-    <select name="developer" id="developer" >
+<div class="col-12">
+  <h1>Update Task</h1>
+  
+  
+  <div class="alert alert-primary">
+    
+    Story: S-{{ task['story_id'] }} {{ task['story_title'] }}
+  
+  
+  </div>
+  
+  <form method="post" class="needs-validation" novalidate>
+    <div class="row g-3">
+    <div class="col-12"> 
+      <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+      <input name="title" id="title" class="form-control" value="{{ request.form['title'] or task['title'] }}" required>
+      <div class="invalid-feedback">
+        Title is required.
+      </div>
+   
+    </div>
+    <div class="col-12">
+      <label for="content" class="form-label">Description</label>
+      <textarea name="content" rows="5" id="content" class="form-control">{{ request.form['content'] or task['content']  }}</textarea>
+    </div>
+    
+
+    <div class="col-6"> 
+      
+      <label for="iteration" class="form-label">Iteration</label>
+      <input name="iteration" id="iteration" class="form-control" value="{{ request.form['iteration'] or task['iteration'] }}" >
+      
+    </div>
+    <div class="col-6">
+      <label for="developer" class="form-label">Assigned to developer</label>
+      <select name="developer" id="developer" class="form-control">
+        <option value=""></option>
         {% for developer in developers %}
-            <option value="{{ developer['id'] }}" 
-            {% if developer['id'] == task['developer_id'] %}
-                selected="selected"
+            <option value="{{ developer }}" 
+            {% if developer == task['developer_name'] %}
+            selected="selected"
             {% endif %}
-            >{{ developer['name_surname'] }}</option>
+            >{{ developer }}</option>
         {% endfor %}
-
+        
     </select>
+   
+      
+    </div>
+    <label for="estimate" class="form-label">Time estimate</label>
+    <div class="col-6"> 
+      <label for="hours" class="form-label">Hours</label>
+      <input name="hours" id="hours" class="form-control" value="{{ request.form['hours'] or hours }}"  onkeypress="return isNumber(event)" onpaste="return false;" required>
+      <div class="invalid-feedback">
+        Field is required. User 0h is necessary.
+      </div>
+    </div>
 
-    <input type="submit" value="Save">
+    <div class="col-6"> 
+      <label for="mintues" class="form-label">Minutes</label>
+      <input name="minutes" id="minutes" class="form-control" value="{{ request.form['minutes'] or minutes }}"  onkeypress="return isNumber(event)" onpaste="return false;" required>
+      <div class="invalid-feedback">
+        Field is required. User 0min is necessary.
+      </div>
+    </div>
+
+    <div class="col-12">
+    <input type="submit" class="w-100 btn btn-primary btn-lg" value="Save">
+    </div>
+    <div class="col-12">
+      <a class="action w-100 btn btn-outline-primary btn-lg" onclick="history.back(-1)" >
+        Cancel
+      </a>
+      </div>
+  </div>
   </form>
+
+</div>
 {% endblock %}
+

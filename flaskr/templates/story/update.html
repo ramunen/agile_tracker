@@ -4,7 +4,7 @@
   
 
 <div class="col-12">
-    <h1>New Story</h1>
+    <h1>Edit story</h1>
     <form method="post" class="needs-validation" novalidate>
       <div class="row g-3">
       <div class="col-12"> 
@@ -19,18 +19,22 @@
         <label for="content" class="form-label">Description</label>
         <textarea name="content" rows="5" id="content" class="form-control">{{ request.form['content'] or story['content'] }}</textarea>
       </div>
-      <div class="col-12">
-        <label for="estimate" class="form-label">Time estimate</label>
-        <div class="col-6 input-group has-validation">
-          <span class="input-group-text" id="hours">Hours:</span>
-          <input type="text" class="form-control" id="hours" aria-describedby="hours" onkeypress="return isNumber(event)" onpaste="return false;" value="{{ request.form['hours'] or story['hours'] }}"required>
-          <span class="input-group-text" id="minutes">Minutes:</span>
-          <input type="text" class="form-control" id="minutes" aria-describedby="minutes" onkeypress="return isNumber(event)" onpaste="return false;" value="{{ request.form['minutes'] or story['minutes'] }}"required>
-          <div class="invalid-feedback">
-            Enter values in both inputs. User 0H or 0Min if needed.
-          </div>
-        </div>
+      <label for="estimate" class="form-label">Time estimate</label>
+    <div class="col-6"> 
+      <label for="hours" class="form-label">Hours</label>
+      <input name="hours" id="hours" class="form-control" value="{{ request.form['hours'] or hours }}"  onkeypress="return isNumber(event)" onpaste="return false;" required>
+      <div class="invalid-feedback">
+        Field is required. User 0h is necessary.
       </div>
+    </div>
+
+    <div class="col-6"> 
+      <label for="mintues" class="form-label">Minutes</label>
+      <input name="minutes" id="minutes" class="form-control" value="{{ request.form['minutes'] or minutes }}"  onkeypress="return isNumber(event)" onpaste="return false;" required>
+      <div class="invalid-feedback">
+        Field is required. User 0min is necessary.
+      </div>
+    </div>
   
       <div class="col-12">
       <input type="submit" class="w-100 btn btn-primary btn-lg" value="Save">
