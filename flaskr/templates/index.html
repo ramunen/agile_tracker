@@ -2,7 +2,7 @@
 
 {% block body %}
 
-  <h1>{% block title %}{% endblock %}</h1>
+  <h3>{% block title %}{% endblock %}</h3>
   <div class="col-12">
     <a class="action w-100 btn btn-outline-primary btn-lg" href="{{ url_for('story.create_story') }}">
       Add new story
@@ -13,38 +13,51 @@
    {% for story in stories %}
    <li class="list-group-item list-group-item-action">
    
-    <div class="d-flex w-100 justify-content-between">
-      <a href="{{ url_for('story.view_story', story_id=story['id']) }}"  aria-current="true"><h5 class="mb-1">S-{{ story['id'] }} {{ story['title'] }}</h5></a> 
-      <small>
-        <a href="{{ url_for('task.create_task', story_id=story['id'])}}">Add new task</a> 
-        <a href="{{ url_for('story.update_story', story_id=story['id'])}}"><i class="fas fa-edit"></i></a> 
-        <a href="{{ url_for('story.delete_story', story_id=story['id'])}}"><i class="fas fa-trash"></i></a> 
-      </small>
+    
+      
+      <div class="float-start col-10">
+      <div >
+      <h6 class="d-inline"><a href="{{ url_for('story.view_story', story_id=story['id']) }}"  aria-current="true"><i class="fas fa-folder-open"></i> S-{{ story['id'] }} {{ story['title'] }}</a> <a href="{{ url_for('story.update_story', story_id=story['id'])}}">Edit <i class="fas fa-edit"></i></a></h6>
     </div>
-
+    <div >
+      
+      </div>
+    </div>
+    <div class="float-end col-2">
+        <small class="col-3">
+        <a href="{{ url_for('task.create_task', story_id=story['id'])}}">Add new task</a> 
+        
+        </small>
+    </div>
+<div class="clearfix"></div>
     <p class="mb-1">{{ story['content'][:200] }}</p>
     <div class="float-end">
-    <small class="badge bg-light rounded-pill text-dark">Est: {{ story['estimate'] }}</small> <small class="badge bg-secondary rounded-pill">Logged: {{  story_logged_hours[story['id']]  }}</small> 
+    <small class="badge bg-light rounded-pill text-dark">Est: {{ story['estimate'] }}min</small> <small class="badge bg-secondary rounded-pill">Logged: {{  story_logged_hours[story['id']]  }}min</small> 
     </div>
   </li>
   {% for task in story_tasks[story['id']] %}
     <li class="list-group-item list-group-item-action">
         
-        <div class="d-flex w-100 justify-content-between">
-          <a href="{{ url_for('task.view_task', task_id=task['task_id']) }}"  aria-current="true"><h6 class="mb-1">T-{{ task['task_id'] }} {{ task['task_title'] }}</h5></a>
-            <small>
+        <div class="float-start">
+          
+          <div class="float-start">
+          <a href="{{ url_for('task.view_task', task_id=task['task_id']) }}"  aria-current="true"><h7 class="d-inline">T-{{ task['task_id'] }} {{ task['task_title'] }}</h7></a>
+          </div>
+          <div class="float-start">
+            <a class="" href="{{ url_for('task.update_task', task_id=task['task_id'])}}"><h7 class="d-inline p-2">Edit <i class="fas fa-edit"></i></h7></a> 
+          </div>
+        </div>
+        <div class="float-end">
+            <small class="col-3">
             {% if  task['developer_name'] is none %}
-            Developer unassigned
+            Task unassigned
             {% else %}
             <a href="{{ url_for('log.create_log', task_id=task[2]) }}">Log time</a>
             {% endif %}
           
-
-            <a href="{{ url_for('task.update_task', task_id=task['task_id'])}}"><i class="fas fa-edit"></i></a> 
-        <a href="{{ url_for('task.delete_task', task_id=task['task_id'])}}"><i class="fas fa-trash"></i></a> 
       </small>
-        </div>
-    
+    </div>
+        <div class="clearfix"></div>
         <p class="mb-1">{{ task['task_content'][:200] }}</p>
         <div class="d-flex w-100 justify-content-between">
           <div>
@@ -65,16 +78,16 @@
           {% if  task['task_estimate'] is none %}
           0
         {% else %}
-        {{ task['task_estimate'] }}
+        {{ task['task_estimate'] }}min
         {% endif %}
           
         </small> 
         <small class="badge bg-secondary rounded-pill">Logged: 
           
           {% if  task['task_actual'] is none %}
-          0
+          0min
         {% else %}
-        {{ task['task_actual'] }}
+        {{ task['task_actual'] }}min
         {% endif %}
 
         </small> 

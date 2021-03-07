@@ -2,7 +2,7 @@
 
 {% block body %}
 
-  <h1>{% block title %}T-{{ task['id'] }} {{task['title'] }}{% endblock %}</h1>
+  <h3>{% block title %}T-{{ task['id'] }} {{task['title'] }}{% endblock %}</h3>
   <div class="">
     <a class="action " href="{{ url_for('index') }}">
       Back to home
@@ -14,7 +14,7 @@
     <div class="mt-3 col-12">
       
       <small>Task description:</small>
-      <div class="mb-3 col-12">{{ task['content'] }}"</div>
+      <div class="mb-3 col-12">{{ task['content'] }}</div>
 
       <small class="badge bg-light rounded-pill text-dark">Estimate: 
         

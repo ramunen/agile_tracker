@@ -1,4 +1,5 @@
 import sqlite3
+import os.path
 
 import click
 from flask import current_app, g
@@ -27,8 +28,15 @@ def init_db():
 
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
+    
 
-    developers = [(['John Smith']), (['Janne Jalonen']), (['Anna Teesti']), (['James Joyce'])]
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(my_path, "developers.txt")
+    developers = []    
+    with open(path, 'r') as f:
+        for developer in f.read().splitlines():
+            developers.append(tuple([developer.strip()]))
+    
     db.executemany(
         'INSERT INTO developers (name_surname)'
         ' VALUES (?)', developers)

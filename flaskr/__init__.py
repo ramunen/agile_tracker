@@ -30,7 +30,7 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    @app.route('/index')
+    @app.route('/')
     def index():
         
         stories = get_stories()
@@ -46,14 +46,11 @@ def create_app(test_config=None):
 
     from . import story
     app.register_blueprint(story.bp)
-    #app.add_url_rule('/', endpoint='story')
-
+    
     from . import task
     app.register_blueprint(task.bp)
-    #app.add_url_rule('/', endpoint='task')
-
+    
     from . import log
     app.register_blueprint(log.bp)
-    #app.add_url_rule('/', endpoint='log')
-
+    
     return app
