@@ -1,8 +1,9 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>{% block meta_title %} {% endblock %}</title>
-    
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet">
 
     <link href="{{url_for('static', filename = 'bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -11,12 +12,12 @@
 
     <!-- Include Date Range Picker -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
 
     <script>
-        $(document).ready(function(){
-            var date_input=$('input[name="date"]'); //our date input has the name "date"
-            var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        $(document).ready(function() {
+            var date_input = $('input[name="date"]'); //our date input has the name "date"
+            var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
             date_input.datepicker({
                 format: 'yyyy-dd-mm',
                 container: container,
@@ -24,32 +25,36 @@
                 autoclose: true,
             })
         })
+
     </script>
 </head>
+
 <body>
-<div class="nav navbar navbar-expand-lg navbar-dark bg-primary justify-content-center">
-{% block header %}
-  <h1 class="text-white">Agile Tracker</h1>
-{% endblock %}
-</div>
-<div class="container col-md-6 col-sm-12 mt-5">
-{% block body %}
- 
- 
-{% endblock %}
-</div> 
- 
-<script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
-<script src="{{url_for('static', filename='bootstrap/js/form-validation.js')}}"></script> 
-<script type="text/javascript">     
-  function isNumber(evt) {
-      evt = (evt) ? evt : window.event;
-      var charCode = (evt.which) ? evt.which : evt.keyCode;
-      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-          return false;
-      }
-      return true;
-  }
-</script>
+    <div class="nav navbar navbar-expand-lg navbar-dark bg-primary justify-content-center">
+        {% block header %}
+        <h1 class="text-white">Agile Tracker</h1>
+        {% endblock %}
+    </div>
+    <div class="container col-md-6 col-sm-12 mt-5">
+        {% block body %}
+
+
+        {% endblock %}
+    </div>
+
+    <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='bootstrap/js/form-validation.js')}}"></script>
+    <script type="text/javascript">
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+
+    </script>
 </body>
+
 </html>
